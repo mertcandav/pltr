@@ -28,12 +28,12 @@ class PrintOp:
 
 # Assignment operation
 class AssignmentOp:
-	def __init__(self, identifier: Token, expr: BinopExpr | BinaryOp) -> None:
+	def __init__(self, identifier: str, expr: BinopExpr | BinaryOp) -> None:
 		self.identifier = identifier
 		self.expr = expr
 
-# AST builder class for experimental X language of PLTR.
-class AST:
+# Parser class for experimental X language of PLTR.
+class Parser:
 	def __init__(self, tokens: list[Token]) -> None:
 		self.tokens = tokens
 		self.logs: list[str] = []
@@ -45,12 +45,6 @@ class AST:
 		pn = 0
 		tokens = self.tokens[self.__offset:]
 		for i, token in enumerate(tokens):
-			if token.identity == ID_PARENTHESES:
-				if token.kind == "(":
-					pn += 1
-				else:
-					pn -= 1
-				continue
 			if pn > 0 or i == 0:
 				continue
 			prev = tokens[i-1]
@@ -58,6 +52,11 @@ class AST:
 			if prev.row < token.row:
 				tokens = tokens[:i]
 				break
+			if token.identity == ID_PARENTHESES:
+				if token.kind == "(":
+					pn += 1
+				else:
+					pn -= 1
 
 		self.__offset += len(tokens)
 		return tokens
@@ -83,7 +82,7 @@ class AST:
 		tokens = tokens[2:]
 		expr = self.__build_expr(tokens)
 
-		return AssignmentOp(identifier, expr)
+		return AssignmentOp(identifier.kind, expr)
 
 	# Append statement to tree from tokens.
 	def __append_statement(self, tokens: list[Token]) -> None:
@@ -104,8 +103,8 @@ class AST:
 		# Expression.
 		self.__tree.append(self.__build_expr(tokens))
 
-	# Builds AST from tokens.
-	def build(self) -> list[BinaryOp]:
+	# Parse AST from tokens.
+	def parse(self) -> list[BinaryOp]:
 		while self.__offset < len(self.tokens):
 			tokens = self.__resume_statement()
 			self.__append_statement(tokens)
@@ -113,15 +112,23 @@ class AST:
 
 	# Builds AST left or right of binary operation.
 	def __build_op(self, tokens: list[Token]) -> BinaryOp | BinopExpr | None:
+		token = tokens[0]
+
 		# If first token is not operator.
-		if tokens[0].identity != ID_OPERATOR:
+		if token.identity != ID_OPERATOR:
 			i = find_lowest_operator(tokens)
 			if i != -1:
 				return self.__build_expr(tokens)
 
 		# Parentheses group.
-		if tokens[0].identity == ID_PARENTHESES:
-			return self.__build_op(tokens[1:-1])
+		if token.identity == ID_PARENTHESES:
+			# Remove parentheses from beginning and end.
+			tokens = tokens[1:-1]
+			# Empty parentheses group.
+			if len(tokens) == 0:
+				self.logs.append(make_log(token, ERROR_EXPRESSION_MISSING))
+				return None
+			return self.__build_op(tokens)
 
 		# Expression can have two token maximum.
 		# If len(token) > 2: invalid syntax
@@ -131,7 +138,6 @@ class AST:
 
 		# If expression have two token, first token must be unary operator.
 		if len(tokens) == 2:
-			token = tokens[0]
 			if token.identity != ID_OPERATOR:
 				self.logs.append(make_log(token, ERROR_INVALID_SYNTAX))
 				return None
@@ -141,7 +147,7 @@ class AST:
 				return None
 			return BinopExpr(token.kind + tokens[1].kind)
 
-		return BinopExpr(tokens[0].kind)
+		return BinopExpr(token.kind)
 
 	# Build evaluate expression.
 	def __build_expr(self, tokens: list[Token]) -> BinaryOp | BinopExpr:
