@@ -11,13 +11,8 @@ ID_PARENTHESES = 5
 
 # Token instance for lexing.
 class Token:
-    identity = 0
-    row = 0
-    column = 0
-    kind = ""
-
-    def __init__(self, identity: int, row: int, column: int, kind: str) -> None:
-        self.identity = identity
-        self.row = row
-        self.column = column
-        self.kind = kind
+	def __init__(self, identity: int, row: int, column: int, kind: str) -> None:
+		self.identity = identity
+		self.row = row
+		self.column = column
+		self.kind = kind

@@ -5,9 +5,11 @@
 from tokens import Token
 from typing import Any
 
-ERROR_WAITING_PARENTHESES: str = "waiting parentheses to close"
-ERROR_INVALID_TOKEN: str = "invalid token: @"
-ERROR_EXTRA_CLOSED_PARENTHESES: str = "extra closed parentheses"
+ERROR_WAITING_PARENTHESES = "waiting parentheses to close"
+ERROR_INVALID_TOKEN = "invalid token: @"
+ERROR_EXTRA_CLOSED_PARENTHESES = "extra closed parentheses"
+ERROR_INVALID_SYNTAX = "invalid syntax"
+ERROR_EXPRESSION_MISSING = "expression missing"
 
 TAG_MARK: str = "@"
 

@@ -49,20 +49,17 @@ OPERATORS: dict[str, int] = {
 
 # Lexer for experimental X language of PLTR.
 class Lexer:
-	# Parentheses counter.
-	__parentheses_n = 0
-	# Current offset of text.
-	__offset = 0
-	# Current column.
-	__column = 0
-	# Current row.
-	__row = 0
-
-	text = ""
-	logs: list[str] = []
-
 	def __init__(self, text: str) -> None:
+		self.logs: list[str] = []
 		self.text = text
+		# Parentheses counter.
+		self.__parentheses_n = 0
+		# Current offset of text.
+		self.__offset = 0
+		# Current column.
+		self.__column = 0
+		# Current row.
+		self.__row = 0
 
 	# Sets lexer to new line.
 	def __new_line(self) -> None:
