@@ -3,6 +3,7 @@
 # license that can be found in the LICENSE file.
 
 from lexer import Lexer
+from ast import AST
 
 # This string is the pseudo representation
 # for source code read from file.

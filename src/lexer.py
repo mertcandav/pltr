@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 from string import punctuation
-from token import *
+from tokens import *
 from logs import *
 
 # Reports rune is space or not.
@@ -34,7 +34,6 @@ def is_decimal(rune: str) -> bool:
 # Keyword dictionary.
 KEYWORDS: dict[str, int] = {
 	"print": ID_PRINT,
-	"let": ID_LET,
 }
 
 # Operator dictionary.
@@ -45,6 +44,7 @@ OPERATORS: dict[str, int] = {
 	"/": ID_OPERATOR,
 	"%": ID_OPERATOR,
 	"^": ID_OPERATOR,
+	"=": ID_OPERATOR,
 }
 
 # Lexer for experimental X language of PLTR.
@@ -69,7 +69,7 @@ class Lexer:
 		self.__column = 1
 		self.__row += 1
 
-	# Resumes from offset.
+	# Resume text from offset.
 	# Skips spaces.
 	# Returns text from starts offset.
 	def __resume(self) -> str:
@@ -106,14 +106,14 @@ class Lexer:
 	# Returns literal string.
 	# Returns empty string if failed lexing.
 	def __lex_num(self, text: str) -> str:
-		i = -1
+		i = 0
 		while i < len(text):
-			i += 1
 			rune = text[i]
 			if rune == '.':
 				return self.__lex_float(text, i)
 			elif not is_decimal(rune):
 				break
+			i += 1
 		if i == 0:
 			return ""
 		return text[:i]
@@ -148,6 +148,7 @@ class Lexer:
 		token.identity = ID_ID
 		return True
 
+	# Reports text is starts with keyword or not.
 	def __is_keyword(self, text: str, keyword: str) -> bool:
 		if not text.startswith(keyword):
 			return False
@@ -164,7 +165,7 @@ class Lexer:
 		for k, v in KEYWORDS.items():
 			if self.__is_keyword(text, k):
 				token.kind = k
-				token.id = v
+				token.identity = v
 				return True
 		return False
 
@@ -173,11 +174,11 @@ class Lexer:
 		for k, v in OPERATORS.items():
 			if text.startswith(k):
 				token.kind = k
-				token.id = v
+				token.identity = v
 				return True
 		return False
 
-	# Resumes from offset and returns token.
+	# Resume text from offset and returns token.
 	# Returns None if finished text lexing.
 	def __token(self) -> Token | None:
 		text = self.__resume()

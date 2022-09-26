@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD 3-Clause
 # license that can be found in the LICENSE file.
 
-from token import Token
+from tokens import Token
 from typing import Any
 
 ERROR_WAITING_PARENTHESES: str = "waiting parentheses to close"

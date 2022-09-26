@@ -7,9 +7,9 @@ ID_ID = 1
 ID_EXPR = 2
 ID_OPERATOR = 3
 ID_PRINT = 4
-ID_LET = 5
-ID_PARENTHESES = 6
+ID_PARENTHESES = 5
 
+# Token instance for lexing.
 class Token:
     identity = 0
     row = 0
