@@ -142,7 +142,7 @@ class Lexer:
 		if lex == "":
 			return False
 		token.kind = lex
-		token.identity = ID_ID
+		token.identity = ID_IDENTIFIER
 		return True
 
 	# Reports text is starts with keyword or not.
@@ -181,8 +181,8 @@ class Lexer:
 		text = self.__resume()
 		if text == "":
 			return None
-		
-		token = Token(ID_NA, self.__row, self.__column, "")
+
+		token = Token(0, self.__row, self.__column, "")
 		if self.__lex_numeric(text, token):
 			pass
 		elif self.__lex_operator(text, token):

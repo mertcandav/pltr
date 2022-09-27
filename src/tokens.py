@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD 3-Clause
 # license that can be found in the LICENSE file.
 
-ID_NA = 0
-ID_ID = 1
+ID_IDENTIFIER = 1
 ID_EXPR = 2
 ID_OPERATOR = 3
 ID_PRINT = 4

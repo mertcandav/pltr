@@ -50,6 +50,7 @@ def evaluate_single(op: BinopExpr, print_steps=False) -> float | int | None:
 
 # Evaluate binary operation expression.
 def evaluate_binary(op: BinaryOp, print_steps=False) -> float | int | None:
+	# Left operand.
 	if print_steps:
 		print("(", end="")
 	l = evaluate(op.left, print_steps)
@@ -57,6 +58,8 @@ def evaluate_binary(op: BinaryOp, print_steps=False) -> float | int | None:
 		return None
 	if print_steps:
 		print(" " + op.operator, end=" ")
+
+	# Right operand.
 	r = evaluate(op.right, print_steps)
 	if r is None:
 		return None

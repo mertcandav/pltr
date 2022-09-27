@@ -71,7 +71,8 @@ class Parser:
 		# Remove print keyword from expression.
 		tokens = tokens[1:]
 
-		expr = self.__build_expr(tokens)
+		i = find_lowest_operator(tokens)
+		expr = self.__build_expr(tokens, i)
 		return PrintOp(expr)
 
 	# Builds assignment operation.
@@ -80,8 +81,8 @@ class Parser:
 		
 		# Remove identifier and assignment operator token.
 		tokens = tokens[2:]
-		expr = self.__build_expr(tokens)
-
+		i = find_lowest_operator(tokens)
+		expr = self.__build_expr(tokens, i)
 		return AssignmentOp(identifier.kind, expr)
 
 	# Append statement to tree from tokens.
@@ -94,14 +95,16 @@ class Parser:
 		# Assignment checking.
 		if len(tokens) > 1:
 			identifier = tokens[0]
-			if identifier.identity == ID_ID:
+			if identifier.identity == ID_IDENTIFIER:
 				# Is assignment.
 				if tokens[1].identity == ID_OPERATOR and tokens[1].kind == "=":
 					self.__tree.append(self.__build_assignment(tokens))
 					return
 
 		# Expression.
-		self.__tree.append(self.__build_expr(tokens))
+		i = find_lowest_operator(tokens)
+		expr = self.__build_expr(tokens, i)
+		self.__tree.append(expr)
 
 	# Parse AST from tokens.
 	def parse(self) -> list[BinaryOp]:
@@ -118,7 +121,7 @@ class Parser:
 		if token.identity != ID_OPERATOR:
 			i = find_lowest_operator(tokens)
 			if i != -1:
-				return self.__build_expr(tokens)
+				return self.__build_expr(tokens, i)
 
 		# Parentheses group.
 		if token.identity == ID_PARENTHESES:
@@ -150,8 +153,8 @@ class Parser:
 		return BinopExpr(token.kind)
 
 	# Build evaluate expression.
-	def __build_expr(self, tokens: list[Token]) -> BinaryOp | BinopExpr:
-		i = find_lowest_operator(tokens)
+	# i: lowers precedences operator.
+	def __build_expr(self, tokens: list[Token], i: int) -> BinaryOp | BinopExpr:
 		# Operator not found, expression is probably
 		# parentheses group or single expression.
 		if i == -1:
@@ -185,11 +188,14 @@ def find_lowest_operator(tokens: list[Token]) -> int:
 		if token.identity != ID_OPERATOR:
 			continue
 		if token.kind == "+" or token.kind == "-":
+			# Return directly because these operators
+			# have lowest precedence level.
 			return i
 		elif token.kind == "/" or token.kind == "*":
 			p2 = p2 if p2 != -1 else i
 		else:
 			p3 = p3 if p3 != -1 else i
+
 	if p2 != -1:
 		return p2
 	return p1
