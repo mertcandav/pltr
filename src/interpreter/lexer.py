@@ -18,18 +18,7 @@ def is_space(rune: str) -> bool:
 
 # Reports rune is decimal or not.
 def is_decimal(rune: str) -> bool:
-	return (
-		rune == '0' or
-		rune == '1' or
-		rune == '2' or
-		rune == '3' or
-		rune == '4' or
-		rune == '5' or
-		rune == '6' or
-		rune == '7' or
-		rune == '8' or
-		rune == '9'
-	)
+	return '0' <= rune and rune <= '9'
 
 # Keyword dictionary.
 KEYWORDS: dict[str, int] = {

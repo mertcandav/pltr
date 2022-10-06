@@ -32,8 +32,8 @@ class AssignmentOp:
 		self.identifier = identifier
 		self.expr = expr
 
-# Parser class for experimental X language of PLTR.
-class Parser:
+# AST class for experimental X language of PLTR.
+class AST:
 	def __init__(self, tokens: list[Token]) -> None:
 		self.tokens = tokens
 		self.logs: list[str] = []
@@ -106,8 +106,8 @@ class Parser:
 		expr = self.__build_expr(tokens, i)
 		self.__tree.append(expr)
 
-	# Parse AST from tokens.
-	def parse(self) -> list[BinaryOp]:
+	# Build AST from tokens.
+	def build(self) -> list[BinaryOp]:
 		while self.__offset < len(self.tokens):
 			tokens = self.__resume_statement()
 			self.__append_statement(tokens)

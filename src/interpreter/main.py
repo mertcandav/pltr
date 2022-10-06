@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD 3-Clause
 # license that can be found in the LICENSE file.
 
-from parser import *
+from ast import *
 from tokens import *
 from lexer import *
 
@@ -136,10 +136,10 @@ def interpret_node(node) -> None:
 if __name__ == "__main__":
 	lexer = Lexer(PSEUDO_SOURCE_CODE)
 	tokens = lexer.lex()
-	parser = Parser(tokens)
-	tree = parser.parse()
-	if len(parser.logs) > 0:
-		print(parser.logs)
+	ast = AST(tokens)
+	tree = ast.build()
+	if len(ast.logs) > 0:
+		print(ast.logs)
 	else:
 		for node in tree:
 			interpret_node(node)
