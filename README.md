@@ -3,6 +3,10 @@
 TR: PDT (Programlama Dili Teorisi) için Türkçe kaynak. <br>
 EN: Turkish resource for PLT (Programming Language Theory).
 
+> [!IMPORTANT]
+> Düzenli olarak bakımı yapılmamaktadır.\
+> Güncelliğini yitirmiş, eksik/hatalı bilgiler içeriyor olabilir.
+
 ## Katkıda Bulunma
 + Kaynak ya da <a href="./src">src</a> dizininde bulunan herhangi bir uygulamanın hatasını bildirmek için lütfen <a href="https://github.com/mertcandav/pltr/issues">sorun izleyiciyi</a> kullanın.
 + Kaynağı genişletmek ya da uygulamalarda herhangi bir değişiklik için çatalalyın ve ne yaptığınıza dair detaylı bir açıklama ile çekme isteği başlatın.
